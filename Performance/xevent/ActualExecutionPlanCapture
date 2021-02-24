@@ -1,0 +1,36 @@
+-- Following SQL is to capture Actual Execution plan
+
+-- Note: Replace QueryHash, Some times Binary value works but not all the time
+-- object_id can be added to the filter as well! 
+
+-- Collect top 10 sample (Note: Noticed issues where it collected more events)
+--Crate a session to collect the first 10 events only
+
+IF EXISTS(SELECT *
+FROM sys.server_event_sessions
+WHERE name='ActualPlan_top_10')
+  DROP EVENT session ActualPlan_top_10 ON SERVER;
+GO
+
+CREATE EVENT SESSION ActualPlan_top_10 ON SERVER
+ADD EVENT sqlserver.query_post_execution_showplan(
+ACTION(sqlserver.query_hash,sqlserver.sql_text)
+WHERE (
+[sqlserver].[query_hash]=(13775262927842957000) 
+-- OR object_id = 454186426
+AND package0.counter <= 10 ))
+ADD TARGET package0.asynchronous_file_target
+  (SET filename=N'M:\SQL\Backups\ExcludeFromNetbackup\11072020\ActualPlan_top_10.xel')
+WITH (MAX_DISPATCH_LATENCY = 1 SECONDS)
+GO
+
+--Start the session
+ALTER EVENT SESSION ActualPlan_top_10 ON SERVER  
+STATE = start;  
+GO 
+
+--Stop the session
+ALTER EVENT SESSION ActualPlan_top_10 ON SERVER  
+STATE = stop;  
+GO 
+
