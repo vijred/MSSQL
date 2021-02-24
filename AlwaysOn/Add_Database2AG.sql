@@ -41,3 +41,15 @@ WITH NORECOVERY
 ALTER DATABASE [DBName] 
 SET HADR AVAILABILITY GROUP = [AGName] ;
 
+
+
+------------
+--  Removing a dataase from AG 
+------------
+-- How to suspend data movement on a given DB 
+ALTER DATABASE [DBName] SET HADR SUSPEND;
+GO
+
+-- How to remove a database from AG 
+ALTER DATABASE [DBName] SET HADR OFF;
+GO
