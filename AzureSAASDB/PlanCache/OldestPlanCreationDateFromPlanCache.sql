@@ -6,5 +6,5 @@ select top 100 DB_NAME(dbid), creation_time, * FROM    sys.dm_exec_query_stats q
 JOIN sys.dm_exec_cached_plans cp on cp.plan_handle = qs.plan_handle
 cross apply sys.dm_exec_sql_text(qs.plan_handle) as q
 where  dbid = db_id()
-ORDER BY creation_time
+ORDER BY qs.creation_time
 
