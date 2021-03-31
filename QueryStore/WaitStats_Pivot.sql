@@ -14,7 +14,6 @@ join [sys].[query_store_runtime_stats] qsrs on qsrs.plan_id = qsp.plan_id
 join [sys].[query_store_runtime_stats_interval] qsrsi on qsrsi.runtime_stats_interval_id = qsw.runtime_stats_interval_id
 --WHERE qsqt.query_sql_text like '%SELECT %' 
 --AND qsqt.query_sql_text like '%TimeslicePre%'
---AND qsqt.query_sql_text like '%@TransactionType%' 
 where 1=1
  -- qsq.query_id in( 1964420959 ) -- ,2013746646, 1953905594 )
 and start_time > dateadd(hh,-1*@Numberofhours,GETDATE()) 
