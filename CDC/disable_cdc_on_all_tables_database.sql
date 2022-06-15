@@ -29,5 +29,9 @@ BEGIN
 	print 'Disabling CDC on database - ' + @db_name
 	EXEC sys.sp_cdc_disable_db  
 END
+ELSE
+BEGIN
+	print 'CDC is not enabled on the database - ' + @db_name
+END
 
 SET NOCOUNT OFF
