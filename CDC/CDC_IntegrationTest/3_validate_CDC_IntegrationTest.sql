@@ -1,25 +1,13 @@
 -- 3_validate_CDC_IntegrationTest
 
---set statistics IO ON 
---set statistics TIME ON 
---set statistics IO OFF
---set statistics TIME OFF
-
--- insert into maxlsntracker(tablename ,insertdatetime , lsn) values ('t', getdate(), sys.fn_cdc_get_max_lsn())
 insert into maxlsntracker(tablename ,fullcopydatetime) values ('t', getdate())
 
 select TOP 2 *, getdate() as fetchdatetime from t
 order by insertdatetime desc
 
 select getdate() as SelectStatement_endTime
--- insert into maxlsntracker(tablename ,insertdatetime , lsn) values ('t', getdate(), sys.fn_cdc_get_max_lsn())
 
 
---select TOP 100 * from t
---order by insertdatetime desc
-
---select * from maxlsntracker 
---order by 2 desc 
 -- Delay to make sure cdc changes are pushed into cdc table 
 WAITFOR DELAY '00:00:21.000'
 
@@ -69,5 +57,3 @@ select top 300 *
 ,sys.fn_cdc_map_time_to_lsn('smallest greater than', insertdatetime)
 from cdc.dbo_t_CT
 order by __$start_lsn desc 
-
-
